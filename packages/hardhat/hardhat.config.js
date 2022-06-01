@@ -14,7 +14,10 @@ require("@nomiclabs/hardhat-ethers");
 require("@nomiclabs/hardhat-etherscan");
 
 const { isAddress, getAddress, formatUnits, parseUnits } = utils;
-
+const RINKEBY_KEY = process.env.RINKEBY_KEY;
+const DEPLOYER_PRIV_KEY = process.env.DEPLOYER_PRIV_KEY;
+const MUMBAI_KEY = process.env.MUMBAI_KEY;
+const MAINNET_KEY = process.env.MAINNET_KEY;
 /*
       📡 This is where you configure your deploy configuration for 🏗 scaffold-eth
 
@@ -74,11 +77,8 @@ module.exports = {
       */
     },
     rinkeby: {
-      url: "https://rinkeby.infura.io/v3/460f40a260564ac4a4f4b3fffb032dad", // <---- YOUR INFURA ID! (or it won't work)
-      //    url: "https://speedy-nodes-nyc.moralis.io/XXXXXXXXXXXXXXXXXXXXXXX/eth/rinkeby", // <---- YOUR MORALIS ID! (not limited to infura)
-      accounts: {
-        mnemonic: mnemonic(),
-      },
+      url: `https://eth-rinkeby.alchemyapi.io/v2/${RINKEBY_KEY}`,
+      accounts: [DEPLOYER_PRIV_KEY],
     },
     kovan: {
       url: "https://kovan.infura.io/v3/460f40a260564ac4a4f4b3fffb032dad", // <---- YOUR INFURA ID! (or it won't work)
@@ -87,9 +87,9 @@ module.exports = {
         mnemonic: mnemonic(),
       },
     },
+
     mainnet: {
-      url: "https://mainnet.infura.io/v3/460f40a260564ac4a4f4b3fffb032dad", // <---- YOUR INFURA ID! (or it won't work)
-      //      url: "https://speedy-nodes-nyc.moralis.io/XXXXXXXXXXXXXXXXXXXXXXXXX/eth/mainnet", // <---- YOUR MORALIS ID! (not limited to infura)
+      url: `https://eth-mainnet.alchemyapi.io/v2/${MAINNET_KEY}`,
       gasPrice: mainnetGwei * 1000000000,
       accounts: {
         mnemonic: mnemonic(),
@@ -139,12 +139,9 @@ module.exports = {
       },
     },
     mumbai: {
-      url: "https://rpc-mumbai.maticvigil.com",
-      // url: "https://speedy-nodes-nyc.moralis.io/XXXXXXXXXXXXXXXXXXXXXXX/polygon/mumbai", // <---- YOUR MORALIS ID! (not limited to infura)
+      url: `https://polygon-mumbai.g.alchemy.com/v2/${MUMBAI_KEY}`,
+      accounts: [DEPLOYER_PRIV_KEY],
       gasPrice: 3200000000,
-      accounts: {
-        mnemonic: mnemonic(),
-      },
     },
     matic: {
       url: "https://rpc-mainnet.maticvigil.com/",
@@ -231,35 +228,35 @@ module.exports = {
       },
     },
     moonbeam: {
-      url: 'https://rpc.api.moonbeam.network',
+      url: "https://rpc.api.moonbeam.network",
       chainId: 1284,
       accounts: {
         mnemonic: mnemonic(),
       },
     },
     moonriver: {
-      url: 'https://rpc.api.moonriver.moonbeam.network',
+      url: "https://rpc.api.moonriver.moonbeam.network",
       chainId: 1285,
       accounts: {
         mnemonic: mnemonic(),
       },
     },
     moonbaseAlpha: {
-      url: 'https://rpc.api.moonbase.moonbeam.network',
+      url: "https://rpc.api.moonbase.moonbeam.network",
       chainId: 1287,
       accounts: {
         mnemonic: mnemonic(),
       },
     },
     moonbeamDevNode: {
-      url: 'http://127.0.0.1:9933',
+      url: "http://127.0.0.1:9933",
       chainId: 1281,
       accounts: {
         mnemonic: mnemonic(),
       },
     },
     godwoken: {
-      url: 'https://godwoken-testnet-v1.ckbapp.dev',
+      url: "https://godwoken-testnet-v1.ckbapp.dev",
       chainId: 71401,
       accounts: {
         mnemonic: mnemonic(),
