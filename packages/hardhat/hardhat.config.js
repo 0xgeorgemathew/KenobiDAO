@@ -18,6 +18,7 @@ const RINKEBY_KEY = process.env.RINKEBY_KEY;
 const DEPLOYER_PRIV_KEY = process.env.DEPLOYER_PRIV_KEY;
 const MUMBAI_KEY = process.env.MUMBAI_KEY;
 const MAINNET_KEY = process.env.MAINNET_KEY;
+const HH_PRIV_KEY = process.env.HH_PRIV_KEY;
 /*
       📡 This is where you configure your deploy configuration for 🏗 scaffold-eth
 
@@ -70,10 +71,11 @@ module.exports = {
   networks: {
     localhost: {
       url: "http://localhost:8545",
-      /*      
+      accounts: [DEPLOYER_PRIV_KEY, HH_PRIV_KEY],
+      gasPrice: 46637608617,
+      /*
         notice no mnemonic here? it will just use account 0 of the hardhat node to deploy
         (you can put in a mnemonic here to set the deployer locally)
-      
       */
     },
     rinkeby: {
