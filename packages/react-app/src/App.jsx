@@ -300,7 +300,7 @@ function App(props) {
           <Link to="/exampleui">ExampleUI</Link>
         </Menu.Item>
         <Menu.Item key="/mainnetdai">
-          <Link to="/mainnetdai">Mainnet DAI</Link>
+          <Link to="/mainnetdai">Mainnet WETH</Link>
         </Menu.Item>
         <Menu.Item key="/subgraph">
           <Link to="/subgraph">Subgraph</Link>
@@ -353,8 +353,8 @@ function App(props) {
         </Route>
         <Route path="/mainnetdai">
           <Contract
-            name="DAI"
-            customContract={mainnetContracts && mainnetContracts.contracts && mainnetContracts.contracts.DAI}
+            name="WETH"
+            customContract={mainnetContracts && mainnetContracts.contracts && mainnetContracts.contracts.WETH}
             signer={userSigner}
             provider={mainnetProvider}
             address={address}
