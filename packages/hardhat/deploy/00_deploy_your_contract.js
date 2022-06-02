@@ -24,11 +24,21 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
     log: true,
     waitConfirmations: 5,
   });
+  await deploy("Hitlist", {
+    // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
+    from: deployer,
+    args: [5],
+    log: true,
+    waitConfirmations: 5,
+  });
 
   // Getting a previously deployed contract
   const YourContract = await ethers.getContract("YourContract", deployer);
-  const hitlistContract = await ethers.getContractFactory("Hitlist");
-  const deployedWhitelistContract = await hitlistContract.deploy(5);
+
+  const hitlistContract = await ethers.getContract("Hitlist", deployer);
+
+  console.log("Hitlist Contract Address:", YourContract.address);
+  console.log("YourContract1 Contract Address:", hitlistContract.address);
 
   /*  await YourContract.setPurpose("Hello");
   
@@ -79,4 +89,4 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   //   console.error(error);
   // }
 };
-module.exports.tags = ["YourContract"];
+module.exports.tags = ["YourContract", "Hitlist"];

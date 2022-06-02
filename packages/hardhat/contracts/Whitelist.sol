@@ -2,9 +2,13 @@
 pragma solidity ^0.8.0;
 
 contract Hitlist {
+    // Event for when max whitelisted addresses is changed
+    event MaxWhitelistedAddressesChanged(uint8 newMaxWhitelistedAddresses);
+    // Event for when address is added to whitelist
+    event AddedToWhitelist(address newWhitelistedAddress);
     // Max number of whitelisted addresses allowed
     uint8 public maxWhitelistedAddresses;
-
+    address public owner;
     // Create a mapping of whitelistedAddresses
     // if an address is whitelisted, we would set it to true, it is false my default for all other addresses.
     mapping(address => bool) public whitelistedAddresses;
@@ -14,6 +18,7 @@ contract Hitlist {
 
     constructor(uint8 _maxWhitelistedAddresses) {
         maxWhitelistedAddresses = _maxWhitelistedAddresses;
+        owner = msg.sender;
     }
 
     /**
@@ -35,5 +40,12 @@ contract Hitlist {
         whitelistedAddresses[msg.sender] = true;
         // Increase the number of whitelisted addresses
         numAddressesWhitelisted += 1;
+        emit AddedToWhitelist(msg.sender);
+    }
+
+    // fucntion to set the max number of addresses that can be whitelisted
+    function setMaxWhitelistedAddresses(uint8 _maxWhitelistedAddresses) public {
+        maxWhitelistedAddresses = _maxWhitelistedAddresses;
+        emit MaxWhitelistedAddressesChanged(maxWhitelistedAddresses);
     }
 }

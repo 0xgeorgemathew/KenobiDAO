@@ -168,7 +168,8 @@ function App(props) {
 
   // keep track of a variable from the contract in the local React state:
   const purpose = useContractReader(readContracts, "YourContract", "purpose");
-
+  const numAddressesWhitelisted = useContractReader(readContracts, "Hitlist", "numAddressesWhitelisted");
+  const maxWhitelistedAddresses = useContractReader(readContracts, "Hitlist", "maxWhitelistedAddresses");
   /*
   const addressFromENS = useResolveName(mainnetProvider, "austingriffith.eth");
   console.log("🏷 Resolved austingriffith.eth as:",addressFromENS)
@@ -293,6 +294,9 @@ function App(props) {
         <Menu.Item key="/debug">
           <Link to="/debug">Debug Contracts</Link>
         </Menu.Item>
+        <Menu.Item key="/debugwl">
+          <Link to="/debugwl">Debug WL Contracts</Link>
+        </Menu.Item>
         <Menu.Item key="/hints">
           <Link to="/hints">Hints</Link>
         </Menu.Item>
@@ -329,6 +333,23 @@ function App(props) {
             contractConfig={contractConfig}
           />
         </Route>
+        <Route exact path="/debugwl">
+          {/*
+                🎛 this scaffolding is full of commonly used components
+                this <Contract/> component will automatically parse your ABI
+                and give you a form to interact with it locally
+            */}
+
+          <Contract
+            name="Hitlist"
+            price={price}
+            signer={userSigner}
+            provider={localProvider}
+            address={address}
+            blockExplorer={blockExplorer}
+            contractConfig={contractConfig}
+          />
+        </Route>
         <Route path="/hints">
           <Hints
             address={address}
@@ -349,6 +370,9 @@ function App(props) {
             writeContracts={writeContracts}
             readContracts={readContracts}
             purpose={purpose}
+            numAddressesWhitelisted={numAddressesWhitelisted}
+            maxWhitelistedAddresses={maxWhitelistedAddresses}
+
           />
         </Route>
         <Route path="/mainnetdai">

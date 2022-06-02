@@ -37,18 +37,12 @@ export default function Address(props) {
   const { currentTheme } = useThemeSwitcher();
   const address = props.value || props.address;
   const ens = useLookupAddress(props.ensProvider, address);
-  const ensSplit = ens && ens.split(".");
-  const validEnsCheck = ensSplit && ensSplit[ensSplit.length - 1] === "eth";
+
+
   const etherscanLink = blockExplorerLink(address, props.blockExplorer);
   let displayAddress = address?.substr(0, 5) + "..." + address?.substr(-4);
 
-  if (validEnsCheck) {
-    displayAddress = ens;
-  } else if (props.size === "short") {
-    displayAddress += "..." + address.substr(-4);
-  } else if (props.size === "long") {
-    displayAddress = address;
-  }
+
 
   if (!address) {
     return (

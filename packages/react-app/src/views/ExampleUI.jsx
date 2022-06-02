@@ -6,6 +6,8 @@ import { SyncOutlined } from "@ant-design/icons";
 import { Address, Balance, Events } from "../components";
 
 export default function ExampleUI({
+  maxWhitelistedAddresses,
+  numAddressesWhitelisted,
   purpose,
   address,
   mainnetProvider,
@@ -17,6 +19,7 @@ export default function ExampleUI({
   writeContracts,
 }) {
   const [newPurpose, setNewPurpose] = useState("loading...");
+  const [_maxWhitelistedAddresses, setMaxWhitelistedAddresses] = useState("loading...");
 
   return (
     <div>
@@ -24,8 +27,11 @@ export default function ExampleUI({
         ⚙️ Here is an example UI that displays and sets the purpose in your smart contract:
       */}
       <div style={{ border: "1px solid #cccccc", padding: 16, width: 400, margin: "auto", marginTop: 64 }}>
-        <h2>Example UI:</h2>
+        <h2> UI:</h2>
         <h4>purpose: {purpose}</h4>
+        <h4>Addresses Whitelisted: {numAddressesWhitelisted}</h4>
+        <h4>Whitelist Max: {maxWhitelistedAddresses}</h4>
+
         <Divider />
         <div style={{ margin: 8 }}>
           <Input
@@ -44,12 +50,12 @@ export default function ExampleUI({
                   console.log(" 🍾 Transaction " + update.hash + " finished!");
                   console.log(
                     " ⛽️ " +
-                      update.gasUsed +
-                      "/" +
-                      (update.gasLimit || update.gas) +
-                      " @ " +
-                      parseFloat(update.gasPrice) / 1000000000 +
-                      " gwei",
+                    update.gasUsed +
+                    "/" +
+                    (update.gasLimit || update.gas) +
+                    " @ " +
+                    parseFloat(update.gasPrice) / 1000000000 +
+                    " gwei",
                   );
                 }
               });
@@ -60,6 +66,42 @@ export default function ExampleUI({
             Set Purpose!
           </Button>
         </div>
+        <Divider />
+        <div style={{ margin: 8 }}>
+          <Input
+            onChange={e => {
+              setMaxWhitelistedAddresses(e.target.value);
+            }}
+          />
+          <Button
+            style={{ marginTop: 8 }}
+            onClick={async () => {
+              /* look how you call setPurpose on your contract: */
+              /* notice how you pass a call back for tx updates too */
+              const result = tx(writeContracts.Hitlist.setMaxWhitelistedAddresses(_maxWhitelistedAddresses), update => {
+                console.log("📡 Transaction Update:", update);
+                if (update && (update.status === "confirmed" || update.status === 1)) {
+                  console.log(" 🍾 Transaction " + update.hash + " finished!");
+                  console.log(
+                    " ⛽️ " +
+                    update.gasUsed +
+                    "/" +
+                    (update.gasLimit || update.gas) +
+                    " @ " +
+                    parseFloat(update.gasPrice) / 1000000000 +
+                    " gwei",
+                  );
+                }
+              });
+              console.log("awaiting metamask/web3 confirm result...", result);
+              console.log(await result);
+            }}
+          >
+            Set Whitelist Limit!
+          </Button>
+        </div>
+        <Divider />
+
         <Divider />
         Your Address:
         <Address address={address} ensProvider={mainnetProvider} fontSize={16} />
@@ -88,6 +130,17 @@ export default function ExampleUI({
           ensProvider={mainnetProvider}
           fontSize={16}
         />
+        <Divider />
+        <div style={{ margin: 8 }}>
+          <Button
+            onClick={() => {
+              /* look how you call setPurpose on your contract: */
+              tx(writeContracts.Hitlist.addAddressToWhitelist());
+            }}
+          >
+            Set Addr to &quot;🍻 Cheers&quot;
+          </Button>
+        </div>
         <Divider />
         <div style={{ margin: 8 }}>
           <Button
@@ -156,12 +209,13 @@ export default function ExampleUI({
       */}
       <Events
         contracts={readContracts}
-        contractName="YourContract"
-        eventName="SetPurpose"
+        contractName="Hitlist"
+        eventName="AddedToWhitelist"
         localProvider={localProvider}
         mainnetProvider={mainnetProvider}
         startBlock={1}
       />
+
 
       <div style={{ width: 600, margin: "auto", marginTop: 32, paddingBottom: 256 }}>
         <Card>
@@ -195,16 +249,16 @@ export default function ExampleUI({
           <div style={{ marginTop: 8 }}>
             Date Pickers?
             <div style={{ marginTop: 2 }}>
-              <DatePicker onChange={() => {}} />
+              <DatePicker onChange={() => { }} />
             </div>
           </div>
 
           <div style={{ marginTop: 32 }}>
-            <Slider range defaultValue={[20, 50]} onChange={() => {}} />
+            <Slider range defaultValue={[20, 50]} onChange={() => { }} />
           </div>
 
           <div style={{ marginTop: 32 }}>
-            <Switch defaultChecked onChange={() => {}} />
+            <Switch defaultChecked onChange={() => { }} />
           </div>
 
           <div style={{ marginTop: 32 }}>
@@ -216,6 +270,6 @@ export default function ExampleUI({
           </div>
         </Card>
       </div>
-    </div>
+    </div >
   );
 }
