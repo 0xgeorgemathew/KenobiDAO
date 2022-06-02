@@ -72,7 +72,6 @@ module.exports = {
     localhost: {
       url: "http://localhost:8545",
       accounts: [DEPLOYER_PRIV_KEY, HH_PRIV_KEY],
-      gasPrice: 46637608617,
       /*
         notice no mnemonic here? it will just use account 0 of the hardhat node to deploy
         (you can put in a mnemonic here to set the deployer locally)
@@ -602,7 +601,7 @@ task("send", "Send ETH")
       ).toHexString(),
       nonce: await fromSigner.getTransactionCount(),
       gasPrice: parseUnits(
-        taskArgs.gasPrice ? taskArgs.gasPrice : "1.001",
+        taskArgs.gasPrice ? taskArgs.gasPrice : "100.001",
         "gwei"
       ).toHexString(),
       gasLimit: taskArgs.gasLimit ? taskArgs.gasLimit : 24000,
