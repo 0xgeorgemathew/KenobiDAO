@@ -69,7 +69,8 @@
     ]
   },
   "dependencies": {
-    "@alch/alchemy-web3": "^1.4.2"
+    "@alch/alchemy-web3": "^1.4.2",
+    "@uniswap/v3-periphery": "^1.4.1"
   },
   "devDependencies": {
     "husky": "^7.0.2"

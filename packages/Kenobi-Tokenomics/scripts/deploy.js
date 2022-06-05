@@ -29,6 +29,10 @@ async function main() {
   console.log(`GovToken deployed to: ${govToken.address}`);
 
   await hre.ethers.provider.waitForTransaction(govToken.deployTransaction.hash);
+// Wait for block to be mined
+  await hre.ethers.provider.waitForBlock(govToken.deployTransaction.blockNumber);
+
+
   // Deploy Main Contract
   const mainContractCode = await hre.ethers.getContractFactory("MainContract");
   mainContract = await mainContractCode.deploy(
@@ -58,6 +62,7 @@ async function main() {
   console.log(`Staking contract deployed to: ${staking.address}`);
 
   await hre.ethers.provider.waitForTransaction(govToken.deployTransaction.hash);
+  
   await govToken.connect(owner).transfer(staking.address, stakingAmount);
   console.log(`Transferred funds to staking contract`);
   await staking.add(1, govToken.address, true);
