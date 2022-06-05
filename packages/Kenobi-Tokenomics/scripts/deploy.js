@@ -22,8 +22,15 @@ async function main() {
   const govTokenContract = await hre.ethers.getContractFactory("GovToken");
   govToken = await govTokenContract.deploy();
   await govToken.deployed();
-  console.log(`GovToken deployed to: ${govToken.address}`);
+  // Wait for block confirmation
 
+  // Wait for six blocks to make sure the contract is mined
+
+  console.log(`GovToken deployed to: ${govToken.address}`);
+  await hre.ethers.provider.waitForBlock(
+    govToken.deployTransaction.blockNumber + 5
+  );
+  await hre.ethers.provider.waitForTransaction(govToken.deployTransaction.hash);
   // Deploy Main Contract
   const mainContractCode = await hre.ethers.getContractFactory("MainContract");
   mainContract = await mainContractCode.deploy(
@@ -33,25 +40,45 @@ async function main() {
   );
   await mainContract.deployed();
   console.log(`Gov contract deployed to: ${mainContract.address}`);
+  await hre.ethers.provider.waitForBlock(
+    govToken.deployTransaction.blockNumber + 5
+  );
+  await hre.ethers.provider.waitForTransaction(govToken.deployTransaction.hash);
 
   // Deploy Staking Contract
   const stakingContract = await hre.ethers.getContractFactory("Staking");
   const amtPerBlock = stakingAmount.div(stakingTimeFrameBlocks);
   const startBlock = await ethers.provider.getBlockNumber();
   const endBlock = stakingTimeFrameBlocks.add(startBlock);
+
   staking = await stakingContract.deploy(
     govToken.address,
     amtPerBlock,
     startBlock,
     endBlock
   );
+
   await staking.deployed();
   console.log(`Staking contract deployed to: ${staking.address}`);
+
+  await hre.ethers.provider.waitForTransaction(govToken.deployTransaction.hash);
   await govToken.connect(owner).transfer(staking.address, stakingAmount);
   console.log(`Transferred funds to staking contract`);
   await staking.add(1, govToken.address, true);
   console.log(`Created staking pool for governance token`);
 
+  await hre.run("verify:verify", {
+    address: mainContract.address,
+    constructorArguments: [govToken.address, routerAddress, wMaticAddress],
+  });
+  await hre.run("verify:verify", {
+    address: govToken.address,
+  });
+
+  await hre.run("verify:verify", {
+    address: staking.address,
+    constructorArguments: [govToken.address, amtPerBlock, startBlock, endBlock],
+  });
   // Setup liquidity pool on Uni V3
   const positionManager = new ethers.Contract(
     nonFungPosMngAddy,

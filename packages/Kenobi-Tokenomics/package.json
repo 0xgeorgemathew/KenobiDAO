@@ -1,9 +1,8 @@
 {
-  "name": "Tokenomics-Boilerplate",
+  "name": "Kenobi-Boilerplate-Tokenomics",
   "version": "1.0.1",
   "description": "Tokenomics Boilerplate For Solidity",
   "dependencies": {
-    "@nomiclabs/hardhat-ethers": "^2.0.4",
     "@nomiclabs/hardhat-waffle": "^2.0.2",
     "@openzeppelin/contracts": "4.3.2",
     "@openzeppelin/hardhat-upgrades": "1.10.0",
@@ -12,8 +11,8 @@
     "chai": "^4.3.4",
     "dotenv": "^14.2.0",
     "ethereum-waffle": "^3.2.0",
-    "ethers": "^5.0.0",
-    "hardhat": "^2.8.3"
+    "hardhat": "^2.8.3",
+    "hardhat-deploy": "^0.11.10"
   },
   "keywords": [
     "Solidity",
@@ -24,5 +23,10 @@
     "Buy Back",
     "Uniswap"
   ],
-  "author": "James Bachini"
+  "author": "James Bachini",
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers@^0.3.0-beta.13",
+    "@nomiclabs/hardhat-etherscan": "^3.0.4",
+    "ethers": "^5.6.8"
+  }
 }
