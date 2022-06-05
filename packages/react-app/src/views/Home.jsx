@@ -1,7 +1,12 @@
+import { Button, Card, DatePicker, Divider, Input, Progress, Slider, Spin, Switch } from "antd";
+
 import { useContractReader } from "eth-hooks";
 import { ethers } from "ethers";
+import { utils } from "ethers";
 import React from "react";
 import { Link } from "react-router-dom";
+import { Address, Balance, Events } from "../components";
+import { SyncOutlined } from "@ant-design/icons";
 
 /**
  * web3 props can be passed from '../App.jsx' into your local view component for use
@@ -9,12 +14,12 @@ import { Link } from "react-router-dom";
  * @param {*} readContracts contracts from current chain already pre-loaded using ethers contract module. More here https://docs.ethers.io/v5/api/contract/contract/
  * @returns react component
  **/
-function Home({ yourLocalBalance, readContracts }) {
+function Home({ yourLocalBalance, readContracts, address, mainnetProvider, localProvider, price, tx, writeContracts }) {
   // you can also use hooks locally in your component of choice
   // in this case, let's keep track of 'purpose' variable from our contract
   const purpose = useContractReader(readContracts, "YourContract", "purpose");
   const numAddressesWhitelisted = useContractReader(readContracts, "Hitlist", "numAddressesWhitelisted");
-
+  const maxWhitelistedAddresses = useContractReader(readContracts, "Hitlist", "maxWhitelistedAddresses");
   return (
     <div>
       <div style={{ margin: 32 }}>
@@ -75,8 +80,8 @@ function Home({ yourLocalBalance, readContracts }) {
         </div>
       ) : (
         <div style={{ margin: 32 }}>
-          <span style={{ marginRight: 8 }}>🤓</span>
-          The "purpose" variable from your contract is{" "}
+          <span style={{ marginRight: 8 }}> 📝</span>
+          The Number of Addressed in the Whitelist Are{" "}
           <span
             className="highlight"
             style={{
@@ -86,10 +91,55 @@ function Home({ yourLocalBalance, readContracts }) {
               fontWeight: "bolder",
             }}
           >
-            {purpose}
+            {numAddressesWhitelisted}
           </span>
         </div>
       )}
+      <div style={{ margin: 32 }}>
+        <span style={{ marginRight: 8 }}> 📝</span>
+        The Maximum Number Allowed Are{" "}
+        <span
+          className="highlight"
+          style={{
+            marginLeft: 4,
+              /* backgroundColor: "#f9f9f9", */ padding: 4,
+            borderRadius: 4,
+            fontWeight: "bolder",
+          }}
+        >
+          {maxWhitelistedAddresses}
+        </span>
+      </div>
+      <div style={{ margin: 8 }}>
+        <Button
+          onClick={() => {
+            /* look how you call setPurpose on your contract: */
+            tx(writeContracts.YourContract.setPurpose("🍻 Cheers"));
+          }}
+        >
+          Set Purpose to &quot;🍻 Cheers&quot;
+        </Button>
+      </div>
+      <div style={{ margin: 8 }}>
+        <Button
+          onClick={() => {
+            /* look how you call setPurpose on your contract: */
+            tx(writeContracts.Hitlist.addAddressToWhitelist());
+          }}
+        >
+          Set Addr to &quot;🍻 Cheers&quot;
+        </Button>
+      </div>
+
+
+      <Events
+        contracts={readContracts}
+        contractName="Hitlist"
+        eventName="AddedToWhitelist"
+        localProvider={localProvider}
+        mainnetProvider={mainnetProvider}
+        startBlock={1}
+      />
 
       <div style={{ margin: 32 }}>
         <span style={{ marginRight: 8 }}>🤖</span>

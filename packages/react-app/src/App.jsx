@@ -350,6 +350,23 @@ function App(props) {
             contractConfig={contractConfig}
           />
         </Route>
+        <Route exact path="/debugwl">
+          {/*
+                🎛 this scaffolding is full of commonly used components
+                this <Contract/> component will automatically parse your ABI
+                and give you a form to interact with it locally
+            */}
+
+          <Contract
+            name="Hitlist"
+            price={price}
+            signer={userSigner}
+            provider={localProvider}
+            address={address}
+            blockExplorer={blockExplorer}
+            contractConfig={contractConfig}
+          />
+        </Route>
         <Route path="/hints">
           <Hints
             address={address}

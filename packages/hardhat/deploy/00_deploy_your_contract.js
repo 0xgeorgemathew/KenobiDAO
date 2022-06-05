@@ -1,6 +1,19 @@
 // deploy/00_deploy_your_contract.js
-
 const { ethers } = require("hardhat");
+
+const fs = require("fs");
+const uniswapSdk = require("@uniswap/v3-sdk");
+const INonfungiblePositionManager = require("../abis/nfpm.json");
+
+const routerAddress = "0xE592427A0AEce92De3Edee1F18E0157C05861564"; // all nets
+const nonFungPosMngAddy = "0xC36442b4a4522E871399CD717aBDD847Ab11FE88"; // all nets
+const wMaticAddress = "0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889"; // testnet
+// const wMaticAddress = '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270'; // mainnet
+
+const ethAmount = ethers.utils.parseEther("10"); // initial liquidity pool seed amount ETH
+const govTokenAmount = ethers.utils.parseEther("500000"); // initial liquidity pool amount govToken
+const stakingAmount = ethers.utils.parseEther("500000"); // initial distribution to staking contract
+const stakingTimeFrameBlocks = ethers.BigNumber.from("2102400"); // Roughly one year @ 15sec blocks
 
 const localChainId = "31337";
 
@@ -31,6 +44,15 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
     log: true,
     waitConfirmations: 5,
   });
+  await deploy("GovToken", {
+    // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
+    from: deployer,
+    // args: [5],
+    log: true,
+    waitConfirmations: 5,
+  });
+  const govTokenContract = await ethers.getContractFactory("GovToken");
+  console.log(`GovToken deployed to: ${govTokenContract.address}`);
 
   // Getting a previously deployed contract
   const YourContract = await ethers.getContract("YourContract", deployer);
